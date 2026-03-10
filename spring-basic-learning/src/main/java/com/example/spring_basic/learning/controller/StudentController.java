@@ -4,6 +4,8 @@ package com.example.spring_basic.learning.controller;
 import com.example.spring_basic.learning.dto.StudentDto;
 import com.example.spring_basic.learning.entity.Student;
 import com.example.spring_basic.learning.service.StudentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    private static Logger LOGGER= LoggerFactory.getLogger(StudentController.class);
 
     @PostMapping("/api/v1/student")
     public ResponseEntity<Object> saveStudent(@RequestBody StudentDto studentDto) {
@@ -44,6 +47,7 @@ public class StudentController {
     @GetMapping("/api/v1/student")
     public ResponseEntity<Object> getStudent(@RequestParam Long id) {
         Student student = studentService.getStudent(id);
+        LOGGER.info("id of student={}",id);
         if (Objects.isNull(student)) {
             return ResponseEntity.badRequest().body("Invalid request");
         }
