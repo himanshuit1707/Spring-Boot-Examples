@@ -106,3 +106,6 @@ mvnw.cmd
 .mvn/
 mvnw
 mvnw.cmd
+
+
+/logs/
