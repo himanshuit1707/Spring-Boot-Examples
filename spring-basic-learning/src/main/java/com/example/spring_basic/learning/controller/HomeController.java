@@ -5,6 +5,8 @@ import com.example.spring_basic.learning.entity.Student;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -59,5 +61,14 @@ public class HomeController {
         model.addAttribute("student", StudentDto.builder().id(1L).
                 courseName("MCA").email("abc@email.com").name("Himanshu").build());
         return "student-form";
+    }
+
+    // Handle submit
+    @PostMapping("/saveStudent")
+    public String saveStudent(@ModelAttribute("student") StudentDto studentDto) {
+        System.out.println("Name: " + studentDto.getName());
+        System.out.println("Email: " + studentDto.getEmail());
+        System.out.println("Email: " + studentDto.getCourseName());
+        return "result";
     }
 }
