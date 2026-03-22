@@ -1,7 +1,10 @@
 package com.example.spring_basic.learning.service;
 
+import com.example.spring_basic.learning.dto.StudentDto;
 import com.example.spring_basic.learning.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -28,4 +31,16 @@ public class StudentCacheService {
             throw new RuntimeException(e);
         }
     }
+
+    @CacheEvict(value = "students", key = "#id")
+    public void deleteStudent(Long id) {
+        System.out.println("Cache cleared for id: " + id);
+        studentService.deleteStudent(id);
+    }
+
+    @CachePut(value = "students", key = "#studentDto.id")
+    public Student updateStudentCache(StudentDto studentDto) {
+        return studentService.updateStudent(studentDto);
+    }
+
 }

@@ -1,14 +1,12 @@
 package com.example.spring_basic.learning.controller;
 
+import com.example.spring_basic.learning.dto.StudentDto;
 import com.example.spring_basic.learning.entity.Student;
 import com.example.spring_basic.learning.service.StudentCacheService;
-import com.example.spring_basic.learning.service.StudentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -30,5 +28,25 @@ public class CacheController {
         }
         return ResponseEntity.ok(student);
     }
+
+    @PutMapping("/api/v1/student_cache")
+    public ResponseEntity<Object> updateStudent(@RequestBody StudentDto studentDto) {
+        Student student = studentCacheService.updateStudentCache(studentDto);
+        if (Objects.isNull(student)) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
+        return ResponseEntity.ok(student);
+    }
+
+    @DeleteMapping("/api/v1/student_cache")
+    public ResponseEntity<Object> deleteStudent(@RequestParam Long id) {
+        Student student = studentCacheService.getStudentById(id);
+        if (Objects.isNull(student)) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
+        studentCacheService.deleteStudent(id);
+        return ResponseEntity.ok("Student deleted successfully");
+    }
+
 
 }
