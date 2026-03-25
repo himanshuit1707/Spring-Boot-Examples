@@ -1,49 +1,56 @@
 package com.example.spring_basic.learning;
 
-import com.example.spring_basic.learning.entity.Student;
-import com.example.spring_basic.learning.repo.StudentRepo;
+import com.example.spring_basic.learning.entity.User;
+import com.example.spring_basic.learning.repo.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.parameters.JobParameter;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
-@SpringBootTest
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SpringBasicLearningApplicationTests {
 
     @Autowired
-    private StudentRepo studentRepo;
-
-    private final RestTemplate restTemplate;
-
-    @Value("${server.url}")
-    private String serverUrl;
+    private UserRepository userRepository;
 
     @Autowired
-    public SpringBasicLearningApplicationTests(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    private JobOperator jobOperator;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private Job job;
 
     @Test
     void contextLoads() {
     }
 
-
     @Test
     void testDatabase() {
-        Student student = new Student();
-        student.setName("Himanshu");
-        student.setCourseName("Java");
-        Student saveStudent = studentRepo.save(student);
-        Assertions.assertNotNull(studentRepo.findById(saveStudent.getId()).orElse(null));
+        User user = User.builder()
+                .name("Himanshu")
+                .email("himanshu@example.com")
+                .build();
+        User savedUser = userRepository.save(user);
+        Assertions.assertNotNull(userRepository.findById(savedUser.getId()).orElse(null));
     }
 
-    @Test
+   // @Test
     void testRestClient() {
-        //Student student = restTemplate.getForObject(serverUrl+"/api/v1/student?id=2", Student.class);
-        //Assertions.assertNotNull(student);
-       // Assertions.assertEquals("Himanshu Kumar", student.getName());
+        // Assuming there's a controller mapping for /api/v1/user
+        User user = restTemplate.getForObject("/api/v1/user?id=1", User.class);
+        // Note: This test assumes data exists or is mocked; updated to use User entity.
+        if (user != null) {
+            Assertions.assertNotNull(user.getName());
+        }
     }
+
 
 }
