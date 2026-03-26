@@ -1,0 +1,69 @@
+package com.example.spring_boot_test_demo.controller;
+
+
+import com.example.spring_boot_test_demo.dto.StudentDto;
+import com.example.spring_boot_test_demo.entity.Student;
+import com.example.spring_boot_test_demo.service.StudentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
+
+
+@RestController
+public class StudentController {
+
+    private final StudentService studentService;
+
+    @Autowired
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+    private static Logger LOGGER= LoggerFactory.getLogger(StudentController.class);
+
+    @PostMapping("/api/v1/student")
+    public ResponseEntity<Object> saveStudent(@RequestBody StudentDto studentDto) {
+        Student student = studentService.save(studentDto);
+        if (Objects.isNull(student)) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
+        return ResponseEntity.ok(student);
+    }
+
+    @PutMapping("/api/v1/student")
+    public ResponseEntity<Object> updateStudent(@RequestBody StudentDto studentDto) {
+        Student student = studentService.updateStudent(studentDto);
+        if (Objects.isNull(student)) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
+        return ResponseEntity.ok(student);
+    }
+
+
+    @GetMapping("/api/v1/student")
+    public ResponseEntity<Object> getStudent(@RequestParam Long id) {
+        Student student = studentService.getStudent(id);
+        LOGGER.info("id of student={}",id);
+        if (Objects.isNull(student)) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
+        return ResponseEntity.ok(student);
+    }
+
+    @DeleteMapping("/api/v1/student")
+    public ResponseEntity<Object> deleteStudent(@RequestParam Long id) {
+        Student student = studentService.getStudent(id);
+        if (Objects.isNull(student)) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok("Student deleted successfully");
+    }
+
+
+
+}
