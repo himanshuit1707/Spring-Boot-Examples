@@ -42,7 +42,9 @@ public class StudentService {
 
     public void deleteStudent(Long id) {
         Student student = getStudent(id);
-        studentRepo.delete(student);
+        if (Objects.nonNull(student)) {
+            studentRepo.delete(student);
+        }
     }
 
     public Student updateStudent(StudentDto studentDto) {
