@@ -15,10 +15,18 @@ public class MessageProducer {
     public MessageProducer(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
+
     private static final String QUEUE = "my-queue";
 
+    // Queue (P2P)
     public void sendMessage(String message) {
         jmsTemplate.convertAndSend(QUEUE, message);
         System.out.println("Sent message: " + message);
+    }
+
+    // Topic (Pub-Sub)
+    public void sendTopicMessage(String message) {
+        jmsTemplate.convertAndSend("my-topic", message);
+        System.out.println("Sent message from sendTopicMessage: " + message);
     }
 }

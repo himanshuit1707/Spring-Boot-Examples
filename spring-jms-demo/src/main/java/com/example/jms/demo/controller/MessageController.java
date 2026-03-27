@@ -18,7 +18,7 @@ public class MessageController {
 
     @GetMapping("/send")
     public String sendMessage(@RequestParam String message) {
-        producer.sendMessage(message);
+        producer.sendTopicMessage(message);
         return "Message sent: " + message;
     }
 }
