@@ -1,6 +1,9 @@
 package com.example.jms.demo.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,4 +35,16 @@ public class ImageService {
             throw new RuntimeException("Failed to upload image", e);
         }
     }
+
+    public Resource loadFile(String fileName) throws IOException {
+        // Resolve file path
+        Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+        Resource resource = new UrlResource(filePath.toUri());
+        if (!resource.exists() || !resource.isReadable()) {
+            throw new RuntimeException("File not found: " + fileName);
+        }
+        return resource;
+    }
+
+
 }
